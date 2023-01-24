@@ -69,7 +69,7 @@ endEnt.pack()
 
 printBtn = ctk.CTkButton(master=window, text="Save to file", width=30)
 printBtn.bind('<Button-1>', DoTheThing)
-printBtn.pack(pady=5)
+printBtn.pack(pady=10)
 
 savedLbl = ctk.CTkLabel(master=window, text="", wraplength=250)
 savedLbl.pack(pady=5)
