@@ -5,7 +5,7 @@
 from tkinter.filedialog import asksaveasfilename
 import customtkinter as ctk
 
-def DoTheThing():
+def DoTheThing(event):
     errLbl.configure(text="")
     if(startEnt.get().isnumeric() and endEnt.get().isnumeric()):
         if(endEnt.get() > startEnt.get()):
@@ -45,39 +45,33 @@ templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,8
 templateH2 = "^FS^FO480,90^A0,35^FD(773) - 572 - 5399^FS^FO530,140^A0,40,60^FDOption 1^FS^XZ"
 
 window = ctk.CTk()
-window.geometry("600x200")
+window.geometry("330x230")
 window.title("Zebra .PRN File Generator")
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
-startFrame = ctk.CTkFrame(master=window)
-startFrame.pack(padx="50", side=ctk.LEFT)
-
-startLbl = ctk.CTkLabel(master=startFrame, text="Enter the starting label #")
-startLbl.pack()
-
-startEnt = ctk.CTkEntry(master=startFrame, placeholder_text="Start")
-startEnt.pack()
-
-endFrame = ctk.CTkFrame(master=window)
-endFrame.pack(padx="50", side=ctk.RIGHT)
-
-endLbl = ctk.CTkLabel(master=endFrame, text="Enter the ending label #")
-endLbl.pack()
-
-endEnt = ctk.CTkEntry(master=endFrame, placeholder_text="End")
-endEnt.pack()
-
 errLbl = ctk.CTkLabel(master=window, text="")
 errLbl.pack()
 
-printBtn = ctk.CTkButton(master=window, text="Save to file", command=DoTheThing, width=30)
-printBtn.pack()
+startLbl = ctk.CTkLabel(master=window, text="Enter the starting label #")
+startLbl.pack()
 
-emptySpace = ctk.CTkLabel(master=window, text="")
-emptySpace.pack()
+startEnt = ctk.CTkEntry(master=window, placeholder_text="Start")
+startEnt.bind('<Return>', DoTheThing)
+startEnt.pack()
 
-savedLbl = ctk.CTkLabel(master=window, text="")
-savedLbl.pack()
+endLbl = ctk.CTkLabel(master=window, text="Enter the ending label #")
+endLbl.pack()
+
+endEnt = ctk.CTkEntry(master=window, placeholder_text="End")
+endEnt.bind('<Return>', DoTheThing)
+endEnt.pack()
+
+printBtn = ctk.CTkButton(master=window, text="Save to file", width=30)
+printBtn.bind('<Button-1>', DoTheThing)
+printBtn.pack(pady=5)
+
+savedLbl = ctk.CTkLabel(master=window, text="", wraplength=250)
+savedLbl.pack(pady=5)
 
 window.mainloop()
