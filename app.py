@@ -9,6 +9,9 @@
 from tkinter.filedialog import asksaveasfilename
 import customtkinter as ctk
 
+import os
+from dotenv import load_dotenv
+
 
 def DoTheThing(event):
     errLbl.configure(text="")
