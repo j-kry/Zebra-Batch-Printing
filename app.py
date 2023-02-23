@@ -13,7 +13,7 @@ import customtkinter as ctk
 def DoTheThing(event):
     errLbl.configure(text="")
     if (startEnt.get().isnumeric() and qEnt.get().isnumeric()):
-        if (qEnt.get() > startEnt.get()):
+        if (int(qEnt.get()) > 0):
 
             output = ""
 
