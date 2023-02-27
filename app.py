@@ -8,9 +8,10 @@
 
 from tkinter.filedialog import asksaveasfilename
 import customtkinter as ctk
-
+import pyautogui as pag
+import pyperclip as pc
+from subprocess import call
 import os
-from dotenv import load_dotenv
 
 
 def DoTheThing(event):
@@ -54,6 +55,12 @@ def FileSave(text):
                            text=f"Successfully saved to \"{path}\"")
     except:
         print("There is already a file with that name!!")
+
+# Added 02-27-2023
+
+
+def zPrint(text):
+    pc.copy(text)
 
 
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
