@@ -10,8 +10,9 @@ from tkinter.filedialog import asksaveasfilename
 import customtkinter as ctk
 import pyautogui as pag
 import pyperclip as pc
-from subprocess import call
+from subprocess import Popen
 import os
+import time
 
 
 def DoTheThing(event):
@@ -25,7 +26,8 @@ def DoTheThing(event):
                 output += (templateH1 +
                            str(int(startEnt.get()) + x) + templateH2)
 
-            FileSave(output)
+            # FileSave(output)
+            zPrint(output)
         else:
             errLbl.configure(text_color=("#AA0000"),
                              text="Quantity must be greater than 0 😡")
@@ -57,10 +59,21 @@ def FileSave(text):
         print("There is already a file with that name!!")
 
 # Added 02-27-2023
+# Need to run compiled program as admin
 
 
 def zPrint(text):
     pc.copy(text)
+    print(pag.size())
+    Popen(['C:\Program Files (x86)\Zebra Technologies\Zebra Setup Utilities\App\PrnUtils'])
+    time.sleep(3)
+    pag.moveTo(600, 315)  # Move to printer
+    pag.leftClick()
+    pag.moveTo(1100, 675)  # Move to open communication
+    pag.leftClick()
+    pc.paste()
+    pag.moveTo(1000, 250)  # Move to send to printer
+    pag.leftClick()
 
 
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
