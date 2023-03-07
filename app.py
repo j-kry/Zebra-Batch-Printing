@@ -9,9 +9,7 @@
 # from tkinter.filedialog import asksaveasfilename
 import tkinter as tk
 import pyautogui as pag
-import pyperclip as pc
 from subprocess import Popen
-import os
 import time
 
 
@@ -63,7 +61,6 @@ def DoTheThing(event):
 
 
 def zPrint(text):
-    pc.copy(text)
     print(pag.size())
     Popen(['C:\Program Files (x86)\Zebra Technologies\Zebra Setup Utilities\App\PrnUtils'])
     time.sleep(1)  # Wait a second
@@ -71,7 +68,7 @@ def zPrint(text):
     pag.leftClick()
     pag.moveTo(1100, 675)  # Move to open communication
     pag.leftClick()
-    pc.paste()
+    pag.typewrite(text)
     pag.moveTo(1000, 250)  # Move to send to printer
     pag.leftClick()
 
