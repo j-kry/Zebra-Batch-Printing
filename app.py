@@ -68,9 +68,7 @@ def zPrint(text):
     pag.leftClick()
     pag.moveTo(1100, 675)  # Move to open communication
     pag.leftClick()
-    pag.typewrite(text)
-    pag.moveTo(1000, 250)  # Move to send to printer
-    pag.leftClick()
+    pag.write(text)
 
 
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
