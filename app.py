@@ -11,6 +11,7 @@ import tkinter as tk
 import pyautogui as pag
 from subprocess import Popen
 import time
+import pyperclip as pc
 
 
 def DoTheThing(event):
@@ -61,6 +62,7 @@ def DoTheThing(event):
 
 
 def zPrint(text):
+    pc.copy()
     print(pag.size())
     Popen(['C:\Program Files (x86)\Zebra Technologies\Zebra Setup Utilities\App\PrnUtils'])
     time.sleep(1)  # Wait a second
@@ -68,7 +70,7 @@ def zPrint(text):
     pag.leftClick()
     pag.moveTo(1100, 675)  # Move to open communication
     pag.leftClick()
-    pag.write(text)
+    pag.hotkey('ctrl', 'v')
 
 
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
