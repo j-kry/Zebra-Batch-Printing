@@ -22,7 +22,7 @@ def DoTheThing(event):
             output = ""
 
             for x in range(0, int(qEnt.get())):
-                output += (templateH1 +
+                output += (templateH1 + str(prefixEnt.get()) +
                            str(int(startEnt.get()) + x) + templateH2)
 
             # FileSave(output)
@@ -82,6 +82,12 @@ window.title("Zebra .PRN File Generator")
 
 errLbl = tk.Label(master=window, text="")
 errLbl.pack()
+
+prefixLbl = tk.Label(master=window, text="Enter the prefix (ex. 23P or 23N)")
+prefixLbl.pack()
+
+prefixEnt = tk.Entry(master=window, text="Prefix")
+prefixEnt.pack()
 
 startLbl = tk.Label(master=window, text="Enter the starting label #")
 startLbl.pack()
