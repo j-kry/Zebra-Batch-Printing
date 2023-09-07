@@ -62,7 +62,7 @@ def DoTheThing(event):
 
 
 def zPrint(text):
-    pc.copy()
+    pc.copy(text)
     print(pag.size())
     Popen(['C:\Program Files (x86)\Zebra Technologies\Zebra Setup Utilities\App\PrnUtils'])
     time.sleep(1)  # Wait a second
