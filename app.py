@@ -20,10 +20,15 @@ def DoTheThing(event):
         if (int(qEnt.get()) > 0):
 
             output = ""
+            incNum = 0
 
             for x in range(0, int(qEnt.get())):
+                incNum = int(startEnt.get()) + x
+                incNum = str(incNum)
+                if (len(incNum) < 4):
+                    incNum = incNum.zfill(4)
                 output += (templateH1 + str(prefixEnt.get()) +
-                           str(int(startEnt.get()) + x) + templateH2)
+                           incNum + templateH2)
 
             # FileSave(output)
             zPrint(output)
