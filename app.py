@@ -21,6 +21,7 @@ def DoTheThing(event):
 
             output = ""
             incNum = 0
+            templ2 = templateH2 if smallPrintCheck == 0 else templateH2SmallPrinter
 
             for x in range(0, int(qEnt.get())):
                 incNum = int(startEnt.get()) + x
@@ -28,7 +29,7 @@ def DoTheThing(event):
                 if (len(incNum) < 4):
                     incNum = incNum.zfill(4)
                 output += (templateH1 + str(prefixEnt.get()) +
-                           incNum + templateH2)
+                           incNum + templ2)
 
             # FileSave(output)
             zPrint(output)
@@ -80,6 +81,7 @@ def zPrint(text):
 
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
 templateH2 = "^FS^FO480,90^A0,35^FD(773) - 572 - 5399^FS^FO530,140^A0,40,60^FDOption 1^FS^XZ"
+templateH2SmallPrinter = "^FS^FO495,90^A0,35^FD(773) - 572 - 5399^FS^FO530,140^A0,40,60^FDOption 1^FS^XZ"
 
 window = tk.Tk()
 window.geometry("500x400")
@@ -107,6 +109,9 @@ qLbl.pack()
 qEnt = tk.Entry(master=window, text="Quantity")
 qEnt.bind('<Return>', DoTheThing)
 qEnt.pack()
+
+smallPrintCheck = tk.Checkbutton(master=window, text='If using the smaller printer please check this', onvalue=1, offvalue=0)
+smallPrintCheck.pack()
 
 printBtn = tk.Button(master=window, text="Start Print Job", width=15,)
 printBtn.bind('<Button-1>', DoTheThing)
