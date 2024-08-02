@@ -45,27 +45,56 @@ def DisplayLabelLog():
     cur = con.cursor()
     dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
     if(dbList.fetchone() == None):
-        cur.execute("CREATE TABLE label(startLabel, quantity, printDate, who)")
-   #  cur.execute("""INSERT INTO label VALUES('24P100', 10, '08-02-2024', 'Justin'),('24N100', 20, '08-02-2024', 'Matt')""")
-   #  con.commit()
-    results = cur.execute("SELECT * FROM label")
+        cur.execute("CREATE TABLE label(startLabel, quantity, printDate)")
+
+    results = cur.execute("SELECT * FROM label ORDER BY ROWID desc LIMIT 10")
+
+    output = ""
+    for result in results.fetchall():
+      for value in result:
+         output += value + " -- "
+      output += "\n"
+      
     labelLog.config(state="normal")
-    labelLog.insert(tk.END, results.fetchall())
+    labelLog.insert(tk.END, output)
     labelLog.config(state="disabled")
+    con.close()
 
 def InsertIntoLabelLog(prefix, start, quantity):
    con = sqlite3.connect("log.db")
    cur = con.cursor()
    dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
    if(dbList.fetchone() == None):
-      cur.execute("CREATE TABLE label(startLabel, quantity, printDate, who)")
+      cur.execute("CREATE TABLE label(startLabel, quantity, printDate)")
    
-   cur.execute("""INSERT INTO label VALUES({t}, {q}, {d}, {n})""".format(t = prefix + start, q = quantity, d = datetime.now(), n = "Justin"))
+   cur.execute("INSERT INTO label VALUES(?, ?, ?)", (prefix + start, quantity, datetime.now()))
    con.commit()
-   results = cur.execute("SELECT * FROM label LIMIT 10")
+
+   results = cur.execute("SELECT * FROM label ORDER BY ROWID desc LIMIT 10")
+
+   output = ""
+   for result in results.fetchall():
+      for value in result:
+         output += value + " -- "
+      output += "\n"
+
    labelLog.config(state="normal")
-   labelLog.insert(tk.END, results.fetchall())
+   labelLog.delete('0.0', tk.END)
+   labelLog.insert(tk.END, output)
    labelLog.config(state="disabled")
+   con.close()
+
+def PrintLogToConsole(self):
+    con = sqlite3.connect("log.db")
+    cur = con.cursor()
+    results = cur.execute("SELECT * FROM label ORDER BY ROWID desc")
+    output = ""
+    for result in results.fetchall():
+      for value in result:
+         output += value + " -- "
+      output += "\n"
+    print(output)
+    con.close()
        
 
 # Template 1 is for the large printer and template 2 is for the smaller printer
@@ -114,12 +143,16 @@ savedLbl.pack(pady=1)
 labelLogLbl = tk.Label(master=window, text="Last 10 Prints")
 labelLogLbl.pack()
 
-labelLog = tk.Text(master=window, bd="3", bg="light yellow", height=10, width=20, state="disabled")
+labelLogLbl2 = tk.Label(master=window, text="Starting Tag -- Quantity -- Datetime")
+labelLogLbl2.pack()
+
+labelLog = tk.Text(master=window, bd="3", bg="light yellow", height=10, width=60, state="disabled")
 labelLog.pack()
 # On window load add text to the labelLog
 window.after(0, DisplayLabelLog())
 
 viewLogBtn = tk.Button(master=window, text="View Full Log", width=15)
+viewLogBtn.bind('<Button-1>', PrintLogToConsole)
 viewLogBtn.pack()
 
 window.mainloop()
