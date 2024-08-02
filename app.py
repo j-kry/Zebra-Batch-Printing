@@ -1,5 +1,6 @@
 import tkinter as tk
 import pyperclip as pc
+from datetime import datetime
 import sqlite3
 
 # Main Program Function
@@ -13,6 +14,8 @@ def GenerateLabels(event):
             output = ""
             incNum = 0
             templ2 = templateH2 if smallPrintCheck == 0 else templateH2SmallPrinter
+
+            InsertIntoLabelLog(prefixEnt.get(), startEnt.get(), qEnt.get())
 
             for x in range(0, int(qEnt.get())):
                 incNum = int(startEnt.get()) + x
@@ -49,6 +52,21 @@ def DisplayLabelLog():
     labelLog.config(state="normal")
     labelLog.insert(tk.END, results.fetchall())
     labelLog.config(state="disabled")
+
+def InsertIntoLabelLog(prefix, start, quantity):
+   con = sqlite3.connect("log.db")
+   cur = con.cursor()
+   dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
+   if(dbList.fetchone() == None):
+      cur.execute("CREATE TABLE label(startLabel, quantity, printDate, who)")
+   
+   cur.execute("""INSERT INTO label VALUES({t}, {q}, {d}, {n})""".format(t = prefix + start, q = quantity, d = datetime.now(), n = "Justin"))
+   con.commit()
+   results = cur.execute("SELECT * FROM label LIMIT 10")
+   labelLog.config(state="normal")
+   labelLog.insert(tk.END, results.fetchall())
+   labelLog.config(state="disabled")
+       
 
 # Template 1 is for the large printer and template 2 is for the smaller printer
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
