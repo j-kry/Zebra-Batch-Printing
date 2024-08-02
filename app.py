@@ -37,14 +37,14 @@ def PrepareOutput(text):
    # Wait 3 seconds and then hide the label again
    window.after(3000, lambda:savedLbl.config(text=""))
 
-def AddToLog():
+def DisplayLabelLog():
     con = sqlite3.connect("log.db")
     cur = con.cursor()
     dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
     if(dbList.fetchone() == None):
         cur.execute("CREATE TABLE label(startLabel, quantity, printDate, who)")
-    cur.execute("""INSERT INTO label VALUES('24P100', 10, '08-02-2024', 'Justin'),('24N100', 20, '08-02-2024', 'Matt')""")
-    con.commit()
+   #  cur.execute("""INSERT INTO label VALUES('24P100', 10, '08-02-2024', 'Justin'),('24N100', 20, '08-02-2024', 'Matt')""")
+   #  con.commit()
     results = cur.execute("SELECT * FROM label")
     labelLog.config(state="normal")
     labelLog.insert(tk.END, results.fetchall())
@@ -99,7 +99,7 @@ labelLogLbl.pack()
 labelLog = tk.Text(master=window, bd="3", bg="light yellow", height=10, width=20, state="disabled")
 labelLog.pack()
 # On window load add text to the labelLog
-window.after(0, AddText())
+window.after(0, DisplayLabelLog())
 
 viewLogBtn = tk.Button(master=window, text="View Full Log", width=15)
 viewLogBtn.pack()
