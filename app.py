@@ -1,5 +1,6 @@
 import tkinter as tk
 import pyperclip as pc
+import sqlite3
 
 # Main Program Function
 def GenerateLabels(event):
@@ -35,7 +36,19 @@ def PrepareOutput(text):
    savedLbl.configure(fg=("#00AA00"), text="Copied to clipboard!")
    # Wait 3 seconds and then hide the label again
    window.after(3000, lambda:savedLbl.config(text=""))
-   
+
+def AddToLog():
+    con = sqlite3.connect("log.db")
+    cur = con.cursor()
+    dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
+    if(dbList.fetchone() == None):
+        cur.execute("CREATE TABLE label(startLabel, quantity, printDate, who)")
+    cur.execute("""INSERT INTO label VALUES('24P100', 10, '08-02-2024', 'Justin'),('24N100', 20, '08-02-2024', 'Matt')""")
+    con.commit()
+    results = cur.execute("SELECT * FROM label")
+    labelLog.config(state="normal")
+    labelLog.insert(tk.END, results.fetchall())
+    labelLog.config(state="disabled")
 
 # Template 1 is for the large printer and template 2 is for the smaller printer
 templateH1 = "^XA^FO45,30^A0,50,80^FDProperty of Thresholds^FS^FO45,90^BY4^BCN,80,Y,N,N,N^FD"
@@ -80,14 +93,15 @@ printBtn.pack(pady=25)
 savedLbl = tk.Label(master=window, text="")
 savedLbl.pack(pady=1)
 
-labelCodeLbl = tk.Label(master=window, text="Last 10 Prints")
-labelCodeLbl.pack()
+labelLogLbl = tk.Label(master=window, text="Last 10 Prints")
+labelLogLbl.pack()
 
-labelCode = tk.Text(master=window, bd="3", height=10, width=20)
-labelCode.pack()
+labelLog = tk.Text(master=window, bd="3", bg="light yellow", height=10, width=20, state="disabled")
+labelLog.pack()
+# On window load add text to the labelLog
+window.after(0, AddText())
 
 viewLogBtn = tk.Button(master=window, text="View Full Log", width=15)
 viewLogBtn.pack()
-
 
 window.mainloop()
