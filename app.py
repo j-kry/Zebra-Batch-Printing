@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import pyperclip as pc
 from datetime import datetime
 import sqlite3
@@ -15,7 +16,7 @@ def GenerateLabels(event):
             incNum = 0
             templ2 = templateH2 if smallPrintCheck == 0 else templateH2SmallPrinter
 
-            InsertIntoLabelLog(prefixEnt.get(), startEnt.get(), qEnt.get())
+            InsertIntoLabelLog(prefixEnt.get(), startEnt.get(), qEnt.get(), whoPrinted.get())
 
             for x in range(0, int(qEnt.get())):
                 incNum = int(startEnt.get()) + x
@@ -45,7 +46,7 @@ def DisplayLabelLog():
     cur = con.cursor()
     dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
     if(dbList.fetchone() == None):
-        cur.execute("CREATE TABLE label(startLabel, quantity, printDate)")
+        cur.execute("CREATE TABLE label(startLabel, quantity, printDate, whoPrinted)")
 
     results = cur.execute("SELECT * FROM label ORDER BY ROWID desc LIMIT 10")
 
@@ -60,14 +61,14 @@ def DisplayLabelLog():
     labelLog.config(state="disabled")
     con.close()
 
-def InsertIntoLabelLog(prefix, start, quantity):
+def InsertIntoLabelLog(prefix, start, quantity, who):
    con = sqlite3.connect("log.db")
    cur = con.cursor()
    dbList = cur.execute("SELECT name from sqlite_master WHERE name='label'")
    if(dbList.fetchone() == None):
-      cur.execute("CREATE TABLE label(startLabel, quantity, printDate)")
+      cur.execute("CREATE TABLE label(startLabel, quantity, printDate, whoPrinted)")
    
-   cur.execute("INSERT INTO label VALUES(?, ?, ?)", (prefix + start, quantity, datetime.now()))
+   cur.execute("INSERT INTO label VALUES(?, ?, ?, ?)", (prefix + start, quantity, datetime.now(), who))
    con.commit()
 
    results = cur.execute("SELECT * FROM label ORDER BY ROWID desc LIMIT 10")
@@ -132,6 +133,19 @@ qEnt.pack()
 
 smallPrintCheck = tk.Checkbutton(master=window, text='If using the smaller printer please check this', onvalue=1, offvalue=0)
 smallPrintCheck.pack()
+
+options = [
+   "Who are you?",
+   "Courtney",
+   "Jasmine",
+   "Justin",
+   "Matt",
+   "Victor"
+]
+
+whoPrinted = ttk.Combobox(master=window, values=options)
+whoPrinted.set("Who are you?")
+whoPrinted.pack(pady=5)
 
 printBtn = tk.Button(master=window, text="Generate Labels", width=15,)
 printBtn.bind('<Button-1>', GenerateLabels)
